@@ -1,12 +1,67 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Header from "./Header";
 import { LOGIN_BG_IMG } from "../constants/URLs";
+import { checkValidData } from "../utils/validate";
+// import app from "../utils/firebase.config"; // Adjust the path to your firebase config file
+
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../utils/firebase.config";
 
 const Login = () => {
   const [isSignIn, setIsSignInForm] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignIn);
+  };
+
+  const fullName = useRef();
+  const handleButtonClick = (e) => {
+    e.preventDefault();
+    //validate the form data
+    const isValid = checkValidData(
+      email,
+      password,
+      fullName?.current?.value,
+      isSignIn
+    );
+    setErrorMessage(isValid);
+    if (isValid) return false;
+
+    if (isSignIn) {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log("user ", user);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMsg = error.message;
+          setErrorMessage(`${errorCode} - ${errorMsg}`);
+        });
+    } else {
+      console.log("sign up");
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          console.log("user ", user);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMsg = error.message;
+          setErrorMessage(`${errorCode} - ${errorMsg}`);
+          // ..
+        });
+    }
   };
 
   return (
@@ -19,22 +74,33 @@ const Login = () => {
         <h1 className="font-bold text-3xl py-4">
           {isSignIn ? "Sign In" : "Sign Up"}
         </h1>
-        {!isSignIn && <input
-          type="text"
-          placeholder="Full Name"
-          className="p-2 my-4 w-full bg-gray-700 rounded-sm text-white"
-        />}
+        {!isSignIn && (
+          <input
+            type="text"
+            placeholder="Full Name"
+            className="p-2 my-4 w-full bg-gray-700 rounded-sm text-white"
+            ref={fullName}
+          />
+        )}
         <input
           type="text"
           placeholder="Email Address"
           className="p-2 my-4 w-full bg-gray-700 rounded-sm text-white"
+          onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
           placeholder="Password"
           className="p-2 my-4 w-full bg-gray-700 rounded-sm text-white"
+          onChange={(e) => setPassword(e.target.value)}
         />
-        <button className="p-4 my-4 bg-red-700 w-full rounded-sm">
+        {errorMessage && (
+          <p className="text-red-600 font-bold">{errorMessage}</p>
+        )}
+        <button
+          className="p-4 my-4 bg-red-700 w-full rounded-sm"
+          onClick={handleButtonClick}
+        >
           {isSignIn ? "Sign In" : "Sign Up"}
         </button>
         <h1 className="text-gray-300">
