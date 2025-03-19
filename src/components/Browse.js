@@ -7,9 +7,9 @@ const Browse = () => {
   const navigate = useNavigate();
   const handleSignOut = () => {
     signOut(auth)
-      .then(() => {
-        console.log("sign out")
-        navigate("/");
+      .then((res) => {
+        console.log("sign out ", res)
+        // navigate("/");
       })
       .catch((error) => {});
   };

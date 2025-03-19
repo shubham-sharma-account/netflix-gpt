@@ -36,10 +36,8 @@ const Login = () => {
     if (isSignIn) {
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          // Signed in
           const user = userCredential.user;
           console.log("user ", user);
-          // ...
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -47,13 +45,11 @@ const Login = () => {
           setErrorMessage(`${errorCode} - ${errorMsg}`);
         });
     } else {
-      console.log("sign up");
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
           console.log("user ", user);
-          // ...
         })
         .catch((error) => {
           const errorCode = error.code;

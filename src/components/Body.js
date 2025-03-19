@@ -12,24 +12,16 @@ const Body = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("checkkkkkkkkkk");
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("auth state >> ", user);
         const { displayName, email, uid } = user;
         dispatch(addUser({ email, fullName: displayName, uid }));
-        // navigate("/browse");
-        window.location.href = "/browse";
-
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        // ...
+        navigate("/browse");
       } else {
         dispatch(removeUser());
-        // navigate("/");
-        // window.location.href = "/";
-        // User is signed out
-        // ...
+        navigate("/");
+
       }
     });
   }, []);
