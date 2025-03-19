@@ -7,14 +7,18 @@ import { checkValidData } from "../utils/validate";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase.config";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/store/userSlice";
 
 const Login = () => {
   const [isSignIn, setIsSignInForm] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  const dispatch = useDispatch();
 
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignIn);
@@ -50,6 +54,27 @@ const Login = () => {
           // Signed up
           const user = userCredential.user;
           console.log("user ", user);
+          updateProfile(user, {
+            displayName: fullName?.current?.value || "test namee",
+            photoURL:
+              "https://occ-0-3646-3647.1.nflxso.net/dnm/api/v6/vN7bi_My87NPKvsBoib006Llxzg/AAAABTZ2zlLdBVC05fsd2YQAR43J6vB1NAUBOOrxt7oaFATxMhtdzlNZ846H3D8TZzooe2-FT853YVYs8p001KVFYopWi4D4NXM.png?r=229",
+          })
+            .then(() => {
+              console.log("Profile updated!");
+              const { displayName, email, uid, photoURL } = auth.currentUser;
+
+              dispatch(
+                addUser({ email, fullName: displayName, uid, photoURL })
+              );
+
+              // Profile updated!
+              // ...
+            })
+            .catch((error) => {
+              console.log("Error in Profile update ", error);
+              // An error occurred
+              // ...
+            });
         })
         .catch((error) => {
           const errorCode = error.code;
