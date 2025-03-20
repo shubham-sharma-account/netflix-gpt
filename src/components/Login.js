@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import Header from "./Header";
-import { LOGIN_BG_IMG } from "../constants/URLs";
+import { AVTAR_IMAGE, LOGIN_BG_IMG } from "../constants/URLs";
 import { checkValidData } from "../utils/validate";
 // import app from "../utils/firebase.config"; // Adjust the path to your firebase config file
 
@@ -57,7 +57,7 @@ const Login = () => {
           updateProfile(user, {
             displayName: fullName?.current?.value || "test namee",
             photoURL:
-              "https://occ-0-3646-3647.1.nflxso.net/dnm/api/v6/vN7bi_My87NPKvsBoib006Llxzg/AAAABTZ2zlLdBVC05fsd2YQAR43J6vB1NAUBOOrxt7oaFATxMhtdzlNZ846H3D8TZzooe2-FT853YVYs8p001KVFYopWi4D4NXM.png?r=229",
+              AVTAR_IMAGE,
           })
             .then(() => {
               console.log("Profile updated!");

@@ -1,18 +1,37 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { LOGO } from "../constants/URLs";
-import { signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase.config";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser, removeUser } from "../utils/store/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userData = useSelector((store) => store.user);
-  console.log("header user ", userData);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const { displayName, email, uid, photoURL } = user;
+        dispatch(addUser({ email, fullName: displayName, uid, photoURL }));
+        navigate("/browse");
+      } else {
+        dispatch(removeUser());
+        navigate("/");
+      }
+    });
+
+    //unsubscribe when component unmount
+    return () => {
+      unsubscribe()
+    }
+  }, [dispatch, navigate]);
+
   const handleSignOut = () => {
     signOut(auth)
-      .then((res) => {
-        console.log("sign out ", res);
-        // navigate("/");
-      })
+      .then((res) => {})
       .catch((error) => {});
   };
   return (
@@ -22,11 +41,7 @@ const Header = () => {
       </div>
       {userData.length ? (
         <div className="w-36 z-10 flex my-4">
-          <img
-            src={userData[0]?.photoURL}
-            alt="profile-img"
-            className="w-14"
-          />
+          <img src={userData[0]?.photoURL} alt="profile-img" className="w-14" />
           <p
             onClick={handleSignOut}
             className="ml-2 my-3 font-bold text-m cursor-pointer"
