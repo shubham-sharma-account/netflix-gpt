@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { API_OPTIONS } from "../constants/URLs";
 import MovieList from "./MovieList";
+import { useSelector } from "react-redux";
 
 const SecondaryContainer = () => {
+    const movieDetails = useSelector((store) => store.movies);
+  
   const [popularMovies, setPopularMovies] = useState([]);
   useEffect(() => {
     const getPopularVideos = async () => {
@@ -17,6 +20,8 @@ const SecondaryContainer = () => {
     };
     getPopularVideos();
   }, []);
+
+  console.log("movieDetails ", movieDetails);
 
 
 

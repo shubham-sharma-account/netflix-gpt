@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 const MainContainer = () => {
   const movieDetails = useSelector((store) => store.movies.nowPlayingMovies);
   const randomMovie =
-  movieDetails?.length && movieDetails[Math.floor(Math.random() * movieDetails.length)];
+  movieDetails?.length && movieDetails[0];
   return (
     <div>
       <VideoBackground recommendedMovie={randomMovie} />
