@@ -23,7 +23,7 @@ const VideoBackground = ({ recommendedMovie }) => {
     <div className="relative bg-gray-200 h-[40rem]">
       {trailorId && (
         <iframe
-          className="h-[40rem] w-[99rem]"
+          className="h-[50rem] w-[99rem]"
           width="560"
           height="315"
           src={`https://www.youtube.com/embed/${trailorId}?autoplay=1&mute=1&si=30ihTS_IgezUUMat&controls=0&modestbranding=1&showinfo=0&rel=0`}
