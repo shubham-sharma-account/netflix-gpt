@@ -46,7 +46,7 @@ const Login = () => {
           const errorCode = error.code;
           const errorMsg = error.message;
           setErrorMessage(`${errorCode} - ${errorMsg}`);
-        });
+      });
     } else {
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
@@ -80,7 +80,7 @@ const Login = () => {
           const errorMsg = error.message;
           setErrorMessage(`${errorCode} - ${errorMsg}`);
           // ..
-        });
+      });
     }
   };
 
